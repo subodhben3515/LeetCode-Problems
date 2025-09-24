@@ -6,13 +6,14 @@
 //
 #include <iostream>
 #include <vector>
+#include "pthread.h"
 
 using namespace std;
-
+//s
 
 // C Program for
 // checking duplicate
-// values in a array
+// values in a arrayasdas
 
 void sort(vector<int>& arr, unsigned long size)
 {
@@ -1243,7 +1244,73 @@ void circularBuffer()
         cout << j << " ";
 }
 
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+bool isEvenTurn = true;
 
+void* printOddNumbers(void* arg)
+{
+    for(int i = 1 ; i <= 10 ; i+=2)
+    {
+        pthread_mutex_lock(&mutex1);
+        while(isEvenTurn)
+            pthread_cond_wait(&cond, &mutex1);
+        
+        cout<< "Odd Number: " << i << endl;
+        isEvenTurn = true;
+        pthread_cond_signal(&cond);
+        pthread_mutex_unlock(&mutex1);
+    }
+    return nullptr;
+}
+
+void* printEvenNumbers(void *arg)
+{
+    for(int i = 0 ; i <= 10 ; i+=2)
+    {
+        pthread_mutex_lock(&mutex1);
+        while(!isEvenTurn)
+            pthread_cond_wait(&cond, &mutex1);
+        
+        cout<< "Even Number: " << i << endl;
+        isEvenTurn = false;
+        pthread_cond_signal(&cond);
+        pthread_mutex_unlock(&mutex1);
+    }
+    return nullptr;
+}
+
+
+
+void threadOddEven()
+{
+    /*
+     mutex: So that only one thread can access shared data at a time
+     conditional variable: Sleep a thread until a condition is condition is met
+     
+     thread functionality
+     
+     for loop till n number
+     lock mutex
+     
+        while
+        wait
+     print num
+     notify
+     unlock mutex
+     */
+    
+    pthread_t t1, t2;//(printNumbers);//, t2;
+    
+    pthread_create(&t1, NULL, printEvenNumbers, NULL);
+    pthread_create(&t2, NULL, printOddNumbers, NULL);
+    
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+   // t1.join();
+    
+    
+}
 
 int main()
 {
@@ -1260,7 +1327,7 @@ int main()
     
     //cout << " " << sizePtr(tb) << endl;
     
-    singlyLL();//ircularBuffer();
+    threadOddEven();//ircularBuffer();
     //cout << val<float> << endl;
     
     //runningSum();
