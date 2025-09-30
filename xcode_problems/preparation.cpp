@@ -7,6 +7,18 @@
 #include <iostream>
 #include <vector>
 #include "pthread.h"
+#include <arpa/inet.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <cstring>
+
 
 using namespace std;
 //s
@@ -1312,6 +1324,320 @@ void threadOddEven()
     
 }
 
+string removeNumerics(string &s)
+{
+    string temp;
+    
+    for(int i = 0 ; i < s.size() ; i ++)
+    {
+        if(s[i] >= 65 or s[i] <=91)
+        {
+            temp = temp+s[i];
+            continue;
+        }
+        
+    }
+    cout<< "Without numerics: " << temp;
+    return temp;
+}
+
+bool stringPalindromCheck()
+{
+    string s = "S4U3B4U66666666666s";
+    //string::iterator start = s.begin();//cout <<"start value: " << *start;
+    //string::iterator end = s.end();
+    
+    int i = 0;
+    auto j = s.size();
+    while(i<j)
+    {
+        while(i<j && !isalpha(s[i])) i++;
+        while(i<j && !isalpha(s[j])) j--;
+
+        if(tolower(s[i]) != tolower(s[j]))
+        {
+            cout<< "Not a palindrome" << endl;;
+
+            return false;
+        }
+           
+        i++;
+        j--;
+    }
+    cout<< "It's palindrome" << endl;
+
+    //string s2 = removeNumerics(s);
+    
+    //char *start, *end;
+    
+    //start = s;
+    //end = (char*)(&s2+s2.size());
+    
+    cout<< "string addr is: " << &s << endl;
+    return true;
+    
+    
+}
+
+void copyConstructorDemo()
+{
+    class string
+    {
+    public:
+        char *c;
+        
+        string()
+        {
+            c = new char[20];
+            strcpy(c, "Default value");
+            cout << "c: " << c << endl;
+        }
+        string(char* value)
+        {
+            c = new char[20];
+            strcpy(c, value);
+            cout << "c: " << c << endl;
+        }
+        //string(string& s)
+        void print()
+        {
+            cout << "Addr of c:" << &c << endl;
+            cout << "c points to address: " << static_cast<void*>(c) << endl;
+            cout << "c: " << c << endl;
+        }
+        
+        void deleteChar()
+        {
+            delete c;
+        }
+        string(const string &s)
+        {
+            c = new char[20];
+            strcpy(c, s.c);
+            
+        }
+        
+        string& operator=(string& other)
+        {
+            cout << "Subodh assignment operation"<< endl;;
+            if(this != &other)
+            {
+                delete[] c;
+                c = new char[20];
+                strcpy(c, other.c);
+            }
+            //this->c = other.c;
+            
+            return *this;
+        }
+    };
+    
+    string s1;
+    string s2("Subodh");
+    s2.print();
+    string s3 = s2;
+   // s3=s2;
+    s3.print();
+    string s4 = s2;
+    s2.deleteChar();
+    s3.print();
+    s4.print();
+    string s5;
+    s5 = s4;
+    s5.print();
+}
+
+void reverseSentence(string& s)
+{
+    cout << "Size: " << s.size() << endl;
+    string tmp(s.size(), '\0');
+    for(int i = 0; i < s.size(); i++)
+    {
+        cout << "Copying" << s[s.size() - i - 1] << endl;
+        tmp[i] = s[s.size() - i - 1];
+    }
+    
+    cout << "Reversed Sentence: " << tmp << endl;
+    
+    s = tmp;
+}
+
+void reverseWords(string& s)
+{
+    int first = 0; int last = 0;
+    //int nextFirst = 0;
+    int i = 0;
+    int lastTmp=0;
+    
+    while(true)
+    {
+        cout <<"first while, i:" << i << "s[i] =" <<s[i]<< endl;
+        last = lastTmp;
+        while(s[i] != ' ' && s[i]  != '\0') {cout << " second while" << endl;last++;i++;}
+        lastTmp = last;
+        
+        //nextFirst = last+1;
+        last--;
+        
+        while(first < last)
+        {
+            cout<< "third while" << endl;
+            char tmp = s[first];
+            s[first] = s[last];
+            s[last] = tmp;
+            
+            first++;
+            last--;
+        }
+        first = lastTmp +1;
+
+        if(s[i] == '\0')
+            return;
+        else{
+            i++;lastTmp++;}
+        
+        
+    }
+}
+
+void revStringWhilePreservingOrder()
+{
+    
+    std::string s = "me love programming";
+    string tmp(s);
+    
+    void reverseSentence(string&);
+    
+    void reverseWords(string&);
+    
+    reverseSentence(s);
+    cout << " Modified sentence: " << s << endl;
+
+    
+    reverseWords(s);
+    
+    cout << " Original: " << tmp << endl;
+    
+    cout << " Modified: " << s << endl;
+    
+
+}
+
+void changeEndianess()
+{
+    int a = 0x18192021;
+
+    cout << hex << " a: 0x" << a << endl;
+    
+    int leftMostByte = (a & 0x000000FF) << 24; // After AND opertion result would be 0x00000021
+    int leftMiddleByte = ( a & 0x0000FF00) << 8; // After AND opertion result would be 0x0002000
+    int rightMiddleByte = (a & 0x00FF0000) >> 8; // After AND opertion result would be 0x00190000
+    int rightMostByte = (a & 0xFF000000) >> 24; // After AND opertion result would be 0x18000000
+    
+    int b = (leftMostByte | leftMiddleByte | rightMiddleByte | rightMostByte);
+    
+    cout << hex << " b: 0x" << b << endl;
+
+}
+
+void socketProgrammingTest()
+{
+    /*
+     Server:
+     
+     socket
+     bind
+     listen
+     accept
+     send/recv/read
+     close
+     
+     Client:
+     
+     socket
+     connect
+     send/recv/read
+     close
+     
+     */
+    int size =1024;
+    char buffer[1024];
+    
+    char msg[]="hello";
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    
+    struct sockaddr_in serverAddr;
+    
+    memset(&serverAddr, 0 , sizeof(serverAddr));
+    
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr=inet_addr("0.0.0.0");
+    serverAddr.sin_port = htons(8080);
+    
+    bind(sock, serverAddr, sizeof(serverAddr));
+    
+    listen(sock, 10);
+   // auto addrLen = sizeof(serverAddr);
+    socklen_t addrlen = sizeof(serverAddr);
+
+    int new_sock = accept(sock, (struct sockaddr *)&serverAddr, &addrlen);
+    
+    read(new_sock,buffer, size);
+    
+    send(new_sock, msg, strlen(msg), 0);
+    
+    close(new_sock);
+    close(sock);
+    
+    
+    
+    // Client
+    
+    // same socket
+    connect(sock,(struct sockaddr *)&serverAddr,addrlen);
+    
+    send(new_sock, msg, strlen(msg), 0);
+
+    
+}
+
+void testProgramPointers()
+{
+    int a = 5;
+    int *p = &a;
+    
+    cout << "a: " << a << endl;
+    cout << "*p: " << *p << endl;
+}
+
+void fileOpen()
+{
+    FILE *fp;
+    char buff[100];
+    
+    fp = fopen("/tmp/dummy.txt", "rw");
+    
+    if(fp == NULL) {
+        printf("Not able to open the file.\n");
+        return;
+    }
+    fprintf(fp, "Using fprintf\n");
+    fputc('X', fp);
+    fputs("SUUUBBUU\n", fp);
+    
+    fgets(buff, 100, fp);
+    
+    cout << "buff: " << buff<< endl;
+    
+    fgets(buff, 100, fp);
+    
+    cout << "buff: " << buff<< endl;
+    
+    fclose(fp);
+    
+    
+}
+
 int main()
 {
     //cout << "multiply is : " << multiply<int>(2, 3) << endl;
@@ -1327,7 +1653,7 @@ int main()
     
     //cout << " " << sizePtr(tb) << endl;
     
-    threadOddEven();//ircularBuffer();
+    fileOpen();//ircularBuffer();
     //cout << val<float> << endl;
     
     //runningSum();
