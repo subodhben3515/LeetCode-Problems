@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <cstring>
+#include <regex>
 
 
 using namespace std;
@@ -1433,7 +1434,7 @@ void copyConstructorDemo()
     };
     
     string s1;
-    string s2("Subodh");
+    string s2 ="Subodh";
     s2.print();
     string s3 = s2;
    // s3=s2;
@@ -1638,6 +1639,151 @@ void fileOpen()
     
 }
 
+void stringTest()
+{
+    string str = "hello";
+    string str1("bye");
+    
+    // Accessing
+    cout << str[3] << endl;
+    cout <<str1.at(2) << endl;
+    
+    // size
+    cout << str.size() << endl;
+    cout << str1.length() << endl;
+    
+    //concat
+    string result = str + " " + str1;
+    
+    cout << result << endl;
+    
+    string r2("Bye");
+    string r3 = r2;
+    string r4 = r3;
+    
+    r2.append(str1);
+    
+    cout << r2 << endl;
+    
+    // insert/erase/pop/push
+    
+    cout << str << endl;
+
+    str.push_back('!');
+    
+    cout << str << endl;
+
+    str.pop_back();
+    
+    cout << str << endl;
+
+    str.insert( 5, " Subodh");
+    
+    cout << str << endl;
+
+    
+    str.erase(5, 7);
+    
+    cout << str << endl;
+
+    
+    // substring
+    
+    str.insert( 5, " Subodh");
+
+    string myStr = str.substr(6, 6);
+    
+    cout << myStr << endl;
+
+    // find a string
+    
+    auto pos = myStr.find("oh");
+    
+    if(pos < myStr.length())
+        cout << "Found String" << endl;
+    else
+        cout << "String doesn't exist" << endl;
+
+    // replace -- many overloads.
+    
+    myStr.replace(0, 3 , 3, '?');
+    cout << myStr << endl;
+    
+    // Comparision
+
+    if(r4 == r3)
+        cout << "Same strings" << endl;
+    else
+        cout << " different" << endl;
+    
+    if(r3.compare(r4) == 0)
+        cout << "Same" << endl;
+    else
+        cout << "Different" << endl;
+}
+
+void regexPattern()
+{
+    string para = "Subodh number is +918331-89653. Other numbers are 12312 123 0123-123 12";
+    std::regex pattern("\\+91\\d{4}-\\d{5}");
+    
+    if(std::regex_search(para, pattern))
+        cout << "pattern present" << endl;
+    else
+        cout<< "Not found"  << endl;
+    
+    std::smatch match;
+    if(std::regex_search(para, match, pattern))
+        cout << "pattern present: " << match.str() << endl;
+    else
+        cout<< "Not found"  << endl;
+    
+}
+
+int fpTest(int a, int b)
+{
+    return a+b;
+}
+
+void functionPointer()
+{
+    int (*func)(int, int);
+    
+    func = fpTest;
+    
+    cout << func(5,5) << endl;;
+}
+
+
+void diamondProblem()
+{
+    
+    class A
+    {
+    public:
+        virtual void print()
+        {
+            cout << "Base class A, print" << endl;
+        }
+    };
+    
+    class B : virtual public A
+    {};
+    class C : virtual public A
+    {};
+    class D : public B, public C
+    {};
+    
+    D d;
+    A a;
+    a.print();
+    d.print();
+}
+
+int&& x =5;
+int z = 10;
+int y = std::move(z);
+
 int main()
 {
     //cout << "multiply is : " << multiply<int>(2, 3) << endl;
@@ -1653,7 +1799,7 @@ int main()
     
     //cout << " " << sizePtr(tb) << endl;
     
-    fileOpen();//ircularBuffer();
+    diamondProblem();//ircularBuffer();
     //cout << val<float> << endl;
     
     //runningSum();
