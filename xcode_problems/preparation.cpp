@@ -1526,6 +1526,37 @@ void revStringWhilePreservingOrder()
 
 void changeEndianess()
 {
+    
+    /*
+     Little Endian: (Least significant byte is on the left most side or lowest memory address)
+     0x00f0   16
+     0x00f1    0
+     
+     Big Endian (Most significant byte is on the right most side or lowest memory address)
+     0x00f0    0
+     0x00f1   16
+     
+     
+     In our example
+
+     int a = 0x18192021;
+
+     Little endian
+     
+     00d0 21
+     00d1 20
+     00d2 19
+     00d3 18
+     
+     Big endian
+     
+     00d0 18
+     00d1 19
+     00d2 20
+     00d3 21
+     
+     21 -> 0010 0001 (33)
+     */
     int a = 0x18192021;
 
     cout << hex << " a: 0x" << a << endl;
@@ -1784,6 +1815,483 @@ int&& x =5;
 int z = 10;
 int y = std::move(z);
 
+class Env{
+    
+    Env(){};
+    Env(const Env& e) = delete;
+    ~Env(){};
+
+    
+public:
+    int data;
+    static Env& getInstance()
+    {
+        static Env ptr;
+
+       /* if(ptr == NULL)
+        {
+            ptr = new Env();
+        }*/
+            return ptr;
+    }
+};
+
+//Env Env::ptr;
+
+
+void singletonDesignPattern()
+{
+
+
+    
+    Env& ev1 = Env::getInstance();
+    ev1.data = 5;
+    //delete ev1;
+    //ev1->data = 5;
+    
+    Env& ev2 = Env::getInstance();
+
+    
+    //, ev2;
+    
+    cout << "ev1: " << ev1.data << endl;
+    cout << "ev2: " << ev2.data << endl;
+
+    
+    
+    
+}
+
+class operOver
+{
+public:
+    std::string s1;
+    
+    operOver(std::string str)
+    {
+        s1 = str;
+    }
+    
+    std::string operator+(int val)
+    {
+        s1 = s1 + to_string(val);
+        //strcat(s1, to_string(val));
+        //strcpy(s1, result);
+        return s1;
+    }
+};
+void operatorOverload()
+{
+    operOver obj("Time is: ");
+    
+    cout << obj+1400 << endl;
+    cout << obj.operator+(1500) << endl;
+    
+}
+
+void bitwiseTest()
+{
+    std::bitset<8> i = 0b00011011;
+    
+    cout << "Original : " << i << endl;
+    cout << "Setting 3rd bit to 1: "<< (i | std::bitset<8>(1 << 2)) << endl;
+    cout << "Clearing 3rd bit to 0: "<< (i & ~std::bitset<8>(1 << 2)) << endl;
+    cout << "Flipping 3rd bit : "<< (i ^ std::bitset<8>(1 << 2)) << endl;
+    cout << "Flipping 4th bit : "<< (i ^ std::bitset<8>(1 << 3)) << endl;
+    cout << "Checking if 3rd bit is 1: " << (i & std::bitset<8>(1 << 2)) << endl;
+    cout << "Checking if 4th bit is 1: " << (i & std::bitset<8>(1 << 3)) << endl;
+
+
+    auto a = i & std::bitset<8>(1 << 4);
+    cout << "value of a[4]: " << a[4] << endl;
+}
+
+void decimalToHexa()
+{
+    /*
+     Hexadecimal -> 4 group of 4 bits -> 16 bits -> base16
+     
+     00011011 -> 0000 0000 0001 1011 -> 001B -> 1B
+     
+     17 -> convert to Hexa
+     
+     10001 -> Binary
+     0001 0001 -> 11
+     
+     55 to Hexa
+     div by 16 -> quo 3 rem 7
+     div by 16 -> quo 0 rem 7
+     
+     37 is the Hex
+     
+     55
+     
+     110111 -> 0011 0111 -> 37
+     
+     40 to Hex -> 28
+     
+     div -> 2 8
+     div -> 0 2
+     
+     28 to Hex -> 1C
+     div -> 1 12
+     div -> 0 1
+     
+     */
+   // std::bitset<8> i = 0b00011011;
+
+    
+    std::bitset<16> x = 0x26;
+    
+    cout << "x: " << x << endl;
+    cout << "WTF!!! " << x.to_ulong() << endl;
+    
+    string val;
+    //int count  = 0;
+
+    for(auto i = 15; i >= 0; --i)
+    {
+            val += std::bitset<1>(x[i]).to_string();
+            //count++;
+    }
+    
+    cout << "Final string: " << val << endl;
+    
+    std::bitset<16> dec(val);
+    cout << "string to bitset: " << dec << endl;
+
+    
+    cout << "Decimal value is: " << dec.to_ulong() << endl;
+    
+}
+
+void decToHex()
+{
+    
+    int val = 33;
+    cout << "Decimal: " << val << endl;
+    
+    std::bitset<16> hex(val);
+    
+    int remain = 0, quo = 0, temp = val;
+    std::string s{"0x"};
+    while(true)
+    {
+        quo = temp/16;
+        
+        if(quo == 0)
+        {
+            if (temp < 10)
+                s +=(temp + '0');
+            else
+                s +=( (temp-10) + 'A');
+            cout << "Adding temp: " << temp << endl;
+            break;
+        }
+        remain = temp%16;
+        
+        cout << "Adding quo: " << quo << endl;
+        if (quo < 10)
+            s += (quo + '0');
+        else
+            s+= 'A' + (quo - 10);
+        
+        temp = remain;
+        cout << "s is " << s << endl;
+    }
+    cout << "Hex is " << s << endl;
+    
+    // Optimized
+    remain = 0; quo = 0; temp = val;
+    string s1;
+    
+    while(temp > 0)
+    {
+        int remain = temp %16;
+        
+        if(remain < 10)
+            s1 = char('0' + remain) + s1;
+        else
+            s1 = char('A' + (remain-10)) + s1;
+        
+        temp /= 16;
+    }
+    s1 = "0x" + s1;
+    cout << "Optimized approach, hex: " << s1 << endl;
+}
+
+template <typename T>
+T findMaxValue(T a, T b)
+{
+    return a > b ? a : b;
+}
+
+template <class C, class B>
+int testClassTemplate(C c, B b)
+{
+    return c.i * b.j;
+}
+
+void templateTest()
+{
+
+    cout << findMaxValue(1,2) << endl;
+    
+}
+
+// Template Metaprogramming
+
+template<int N> struct factorialTemp
+{
+    static const int value = N * factorialTemp<N-1>::value;
+};
+
+template<> struct factorialTemp<0>
+{
+    static const int value = 1;
+};
+
+void factorialTemplate()
+{
+    cout << "factotial of 5: "<< factorialTemp<5>::value << endl;
+}
+
+// Own atoi function
+void myAtoi()
+{
+    
+    string s("536");
+    int res = 0;
+    
+    for(char c : s)
+    {
+        res = (res*10)+(c-'0');
+    }
+    
+    cout << "res: " << res << endl;
+}
+
+// TBD
+
+// LL reverse
+
+node* reverseLinkedList(node* head)
+{
+    node *prev, *curr;
+    
+    prev = NULL;
+    curr = head;
+    
+    while(curr != NULL)
+    {
+        node * temp;
+        
+        temp = curr->next;
+        
+        curr->next = prev;
+        
+        prev = curr;
+        curr = temp;
+    }
+    return prev;
+}
+
+node* reverseLLRecursive(node* head)
+{
+    /*
+     find the last node
+     pass last node to prev fun call as head
+     set curr's next node to point to curr node
+     */
+    
+    if(head == NULL || head->next == NULL)
+        return head;
+    
+    node* revHead = reverseLLRecursive(head->next);
+    
+    head->next->next = head;
+    head->next = NULL;
+    
+    return revHead;
+    
+}
+
+void LLReverse()
+{
+    linked_list *head = (linked_list*)malloc(sizeof(linked_list));
+
+    createList(head);
+    printList(head);
+    head = reverseLinkedList(head);
+    printList(head);
+    head = reverseLLRecursive(head);
+    printList(head);
+}
+// Sorting
+
+void sortingTest()
+{
+    std::vector<int> listToSort = {19,2,5,22,34,3,6,5};
+    
+    cout << " Before sorting" << endl;
+    for(auto temp : listToSort)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+    for(int i =0 ; i< listToSort.size() ; i++)
+    {
+        for(int j = 0 ; j < listToSort.size() ; j++)
+        {
+            for(int k = j+1 ; k < listToSort.size() ; k++)
+            {
+                if(listToSort[j] > listToSort[k])
+                {
+                    auto tmp = listToSort[j];
+                    listToSort[j] = listToSort[k];
+                    listToSort[k] = tmp;
+                }
+            }
+        }
+    }
+    
+    cout << " After sorting" << endl;
+    for(auto temp : listToSort)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+}
+
+void selectionSort()
+{
+    /*
+     
+     Find largest or smallest and shift it to the last or first position
+     
+     */
+    
+    std::vector<int> arr = {19,2,5,22,34,3,6,5};
+    cout << " Before sorting" << endl;
+    for(auto temp : arr)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+    auto positionToSwap = arr.size()-1;
+    int positionChoosen = 0;
+    int j = 0;
+    
+    for(int i = arr.size()-1; i >=0  ; --i)
+    {
+        positionChoosen = i;
+        cout << "new loop start" << endl;
+
+        for(j = i-1; j >=0; --j)
+        {
+            if(arr[j] > arr[positionChoosen])
+            {
+                cout << "Largest element:" << arr[j] << "at pos j: " << j << endl;
+                positionChoosen = j;
+            }
+        }
+        
+        cout << "loop ended: " << endl;
+        
+        std::swap(arr[positionToSwap], arr[positionChoosen]);
+        positionToSwap--;
+    }
+
+    cout << " After sorting" << endl;
+    for(auto temp : arr)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+}
+
+void bubbleSort()
+{
+    std::vector<int> arr = {19,2,5,22,34,3,6,5};
+    cout << " Before sorting" << endl;
+    for(auto temp : arr)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+    
+    bool swapped = false;
+    for(int i = 0 ; i < arr.size()-1; i++)
+    {
+        for(int j = 0; j < arr.size()-1-i; j++)
+        {
+            if(arr[j] > arr[j+1])
+            {
+                swapped = true;
+                std::swap(arr[j], arr[j+1]);
+            }
+        }
+
+    }
+    cout << " After sorting" << endl;
+    for(auto temp : arr)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+}
+
+void insertionSortOptimized()
+{
+    /*
+     Thinks left side is always sorted
+     
+     */
+    std::vector<int> arr = {19,2,5,22,34,3,6,5};
+    cout << " Before sorting" << endl;
+    for(auto temp : arr)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+    
+    for(int i = 1; i<arr.size(); i++)
+    {
+        int key = arr[i];
+        int keyIndex = i;
+        
+        for(int j = i -1; j >= 0 ; --j)
+        {
+            if(key < arr[j])
+            {
+                std::swap(arr[j] , arr[keyIndex]);
+                keyIndex = j;
+            }
+        }
+    }
+    
+    cout << " After sorting" << endl;
+    for(auto temp : arr)
+    {
+        cout << temp << " ";
+    }
+    cout << endl;
+}
+
+// Tree height
+// STL
+// Arista ques
+// searching
+// Whats the best alg/stl
+// Singleton and observer
+
+
 int main()
 {
     //cout << "multiply is : " << multiply<int>(2, 3) << endl;
@@ -1799,7 +2307,7 @@ int main()
     
     //cout << " " << sizePtr(tb) << endl;
     
-    diamondProblem();//ircularBuffer();
+    insertionSortOptimized();//ircularBuffer();
     //cout << val<float> << endl;
     
     //runningSum();
