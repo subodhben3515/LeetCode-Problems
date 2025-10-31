@@ -57,6 +57,15 @@ void sort(vector<int>& arr, unsigned long size)
     
 }
 
+
+/*
+ 
+ Alg:
+ 
+ first sort
+ Then overwrite duplicate items with unique ones
+ */
+
 void dupl()
 {
     vector<int> arr = {1,1,4,3,5,5,1};
@@ -84,6 +93,12 @@ void dupl()
 
 // 5. Write a Program to Replace all 0’s with 1’s in a Number.
 
+/*
+ Alg:
+ 
+ % is 0 then result+10^x
+ % is non-zero then result + % * 10^x
+ */
 void replwithone()
 {
     int a = 102301;
@@ -103,6 +118,14 @@ void replwithone()
 
 //6. Write a Program to convert the binary number into a decimal number.
 
+/*
+ Alg:
+ 
+ if % is non zero
+ % -> result + 2^index
+ index++
+ divide by 10
+ */
 void binaryToDecimal()
 {
     int bin = 11011;
@@ -182,6 +205,11 @@ void armstrongNumber()
 
 // 11. Write a Program to reverse a number.
 
+/*
+ Alg:
+ 
+ Multiply prev remainder with 10 and add remainder
+ */
 void reverseNumber()
 {
     
@@ -414,7 +442,20 @@ void repl0w1()
 
 // 8
 // 0000 1000
-
+/*
+ 
+ % with 2 -> get remainder
+ / with 2 -> use it again with %
+ 
+ ex: 15
+ 
+ 15%2 = 1
+ 7%2  = 1
+ 3%2  = 1
+ 1%2  = 1
+ 0
+ 
+ */
 void dec2bin()
 {
     vector<int> result(10);
@@ -1920,7 +1961,7 @@ void decimalToHexa()
      
      55 to Hexa
      div by 16 -> quo 3 rem 7
-     div by 16 -> quo 0 rem 7
+     div by 16 -> quo 0 rem 3
      
      37 is the Hex
      
@@ -2284,57 +2325,322 @@ void insertionSortOptimized()
     cout << endl;
 }
 
+// TODO
+
 // Tree height
 // STL
 // Arista ques
 // searching
 // Whats the best alg/stl
 // Singleton and observer
+//Pointer to char and char pointer
+// String parsing
+// Trim whitespaces at beginning and end
+// Graphs -BFS, DFS
+// Binary tree - balanced or not
+// Tree traversals
+// Check if a value exists along a path from root to leaf
+// Greater element variation array
+
+
+void decimalToBinary()
+{
+    
+    int i = 12345;
+    int j = 0;
+    int arr[32]{};
+    
+    while(i!=0)
+    {
+        arr[j] = i%2;
+        i = i/2;
+        j++;
+    }
+    
+    int size = sizeof(arr)/sizeof(arr[0]);
+    for(int k = size-1; k >=0; --k)
+        cout << " " << arr[k] ;
+    cout << endl;
+}
+
+/*
+ 
+ Arista P2
+ 
+ Rows of string
+ 
+ cus name, cus id, cus dob, cus last working date(dd.mm.yyyy)
+ 
+ find the difference between the dates in days.
+ 
+ Alg:
+ 
+ take one row
+ use stringstream to save values using , as delimiter
+ stringstream ss(row[0]);
+ 
+ getline(ss, myCusName, ',')
+ 
+ After getting start and end date parse them
+ 
+ stringstream s1(startDate)
+ s1 >> int >> char....
+ 
+ years -> days (*365)
+ Add leap years -> days++
+ for loop from Jan to months
+ 
+ add days of current month.
+ Now you get days from 00-00-0000
+ */
+vector<int> findDifferenceInDays(vector<string> input)
+{
+    vector<int> result;
+    
+    std::regex pattern{"\\d{2}\\.\\d{2}\\.\\d{4}"};
+    
+    std::smatch s;
+    
+        // 3️⃣ Use regex_iterator to find *all* matches
+    auto begin = sregex_iterator(input[0].begin(), input[0].end(), pattern);
+    auto end   = sregex_iterator();
+    
+    cout << "Input: " << input[0] << "\n";
+    
+        // 4️⃣ Loop through all matches
+    int index = 1;
+    for (auto it = begin; it != end; ++it) {
+        smatch match = *it;
+        cout << "Date " << index++ << ": " << match.str() << "\n";
+    }
+
+    
+    /*
+    if (regex_search(input[0], s, pattern, regex_constants::match_any)) {
+        cout << "Matched: " << s.str() << endl;
+    } else {
+        cout << "No match found" << endl;
+    }
+    cout << input[0] << endl;
+    cout << s.size() << endl;
+    cout << s.str() << endl;
+    cout << s[0] << endl;
+    
+    s.suffix();
+
+    cout << s[0] << endl;
+    cout << "Regex pattern: " << "\\d{2}\\.\\d{2}\\.\\d{4}" << endl;
+
+    
+    string::const_iterator searchStart( input[0].cbegin() );
+    while ( regex_search( searchStart, input[0].cend(), s, pattern ) )
+    {
+        cout << ( searchStart == input[0].cbegin() ? "" : " " ) << s[0];
+        searchStart = s.suffix().first;
+    }
+    cout << endl;*/
+
+ //   regex_search(input[0], s, pattern);
+
+  //  cout << s[0] << endl;
+    
+    return result;
+}
+
+void aristaP2()
+{
+    vector<string> input{"Subodh, 62253011, 28.06.1995, 14.12.2025",
+        "Nikk, 453453, 04.07.1994, 12.12.2021"};
+    vector<int> result(2);
+    result = findDifferenceInDays(input);
+    
+    for(int i: result)
+        cout << i << endl;
+}
+
+
+// TODO
+
+// Tree height
+// STL
+// Arista ques
+// searching
+// Whats the best alg/stl
+// Singleton and observer
+//Pointer to char and char pointer
+// String parsing
+// Trim whitespaces at beginning and end
+// Graphs -BFS, DFS
+// Binary tree - balanced or not
+// Tree traversals
+// Check if a value exists along a path from root to leaf
+// Greater element variation array
+
 
 
 int main()
 {
-    //cout << "multiply is : " << multiply<int>(2, 3) << endl;
-    //test<int> t(5,10);
-    //test3<int, float, double> t1(5, 40.2, 50.5);
-    //t1.op();
-    cout << endl;
     
-    struct tb{
-        int a;
-        int b;
-    }tb;
     
-    //cout << " " << sizePtr(tb) << endl;
-    
-    insertionSortOptimized();//ircularBuffer();
-    //cout << val<float> << endl;
-    
-    //runningSum();
-    //int a = 9;
-    //factorial();
-    //cout << "factorial is : " << factwR(2) << endl;
 
-    //cout << "testing" << endl;
-    
-    long cpp_version = __cplusplus;
-    
-    if (cpp_version == 199711L) {
-        std::cout << "C++98/03" << std::endl;
-    } else if (cpp_version == 201103L) {
-        std::cout << "C++11" << std::endl;
-    } else if (cpp_version == 201402L) {
-       // std::cout << "C++14" << std::endl;
-    } else if (cpp_version == 201703L) {
-        std::cout << "C++17" << std::endl;
-    } else if (cpp_version == 202002L) {
-        std::cout << "C++20" << std::endl;
-    } else if (cpp_version == 202302L) {
-        std::cout << "C++23" << std::endl;
-    } else {
-        std::cout << "Unknown C++ version: " << cpp_version << std::endl;
-    }
     
     return 0;
 }
+
+/*
+ 
+ vector<int> monthToDays(13, 31);
+ monthToDays[2] = 28;
+ monthToDays[4] = 30;
+ monthToDays[6] = 30;
+ monthToDays[9] = 30;
+ monthToDays[11] = 30;
+ 
+ //int result[1];
+ for(int i = 0; i< records_count; i++)
+ {
+ char* firstRecord = records[i];
+ int j = 0;
+ int numOfComma = 0;
+ while(numOfComma != 2 )
+ {
+ if(firstRecord[j] == ',')
+ {numOfComma++;}
+ 
+ j++;
+ }
+ 
+ std::string day = firstRecord[j] +firstRecord[j+1];
+ string month = firstRecord[j+3];
+ string year = firstRecord[j+5] + firstRecord[j+6] + firstRecord[j+7] + firstRecord[j+8];
+ 
+ int iday = stoi(day);
+ int imonth = stoi(month);
+ int iyear = stoi(year);
+ 
+ 
+ 
+ }
+ */
+
+
+
+
+/*
+
+#include <iostream>
+#include <cstdio>
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+void print_llist(ListNode *head)
+{
+    ListNode *curr = head;
+    printf("\n=== %s ===\n", __func__);
+    while (curr)
+    {
+        printf("[%u]->", curr->val);
+        curr = curr->next;
+    }
+    printf("[XXX]");
+    printf("\n=== %s ===\n", __func__);
+}
+
+// 0 -> head
+// 1 -> first
+
+ListNode *delete_nth_node(ListNode *head, int n)
+{
+    cout << endl;
+    cout << "Deleting node: " << n << endl;
+    
+    // if head is nullptr
+    if(head == nullptr)
+    {
+        cout << "List is empty" << endl;
+        return nullptr;
+    }
+    
+
+        if(n == 0) // delete head
+        {
+            ListNode* temp;
+            temp = head->next;
+            
+            delete head;
+            return temp;
+        }
+        
+        ListNode* curr;
+        ListNode* prev;
+        
+        //1-2-3
+
+        prev = nullptr;
+        curr = head;
+        
+        while(n != 0) {
+            prev = curr;
+            curr = curr->next;
+            if(curr == nullptr)
+            {
+                cout << "Index not found" << endl;
+                return head;
+            }
+            n--;}
+        
+        prev->next = curr->next;
+        
+        delete curr;
+        return head;
+        
+    
+    return nullptr;
+}
+
+// 1-2-3-4-5
+// 1-3-4-5
+
+int main()
+{
+        // Test case 1
+    ListNode *tc_node_1 = new ListNode(1);
+    ListNode *tc_node_2 = new ListNode(2);
+    ListNode *tc_node_3 = new ListNode(3);
+    ListNode *tc_node_4 = new ListNode(4);
+    ListNode *tc_node_5 = new ListNode(5);
+    
+    tc_node_1->next = tc_node_2;
+    tc_node_2->next = tc_node_3;
+    tc_node_3->next = tc_node_4;
+    tc_node_4->next = tc_node_5;
+    tc_node_5->next = nullptr;
+    
+    print_llist(tc_node_1);
+    tc_node_1 = delete_nth_node(tc_node_1, 0);
+    print_llist(tc_node_1);
+    
+    int a = 5;
+    
+    std::bitset<8> i(a);
+    cout << "before shift" << endl;
+    cout << i;
+    cout << endl;
+    auto j = (i | std::bitset<8>(1 << 4));
+    cout << j;
+    //cout << "After shift" << i | bitset<8>(1 << 4);
+    return 0;
+}
+*/
+
+
+
+
 
