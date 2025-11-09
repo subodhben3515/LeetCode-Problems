@@ -1008,6 +1008,10 @@ void doubleLL()
 }
 
 // Binary tree
+// Tree height
+// Binary tree - balanced or not
+
+
 typedef struct bNode
 {
     int data;
@@ -1081,6 +1085,33 @@ void postOrderTraversal(treeNode* list)
 
 }
 
+int heightOfTree(treeNode* head)
+{
+    if(head == NULL)
+        return -1;
+    
+    int lheight = heightOfTree(head->left);
+    int rheight = heightOfTree(head->right);
+    
+    return 1+std::max(lheight, rheight);
+    
+}
+
+bool isBalancedTree(treeNode* head)
+{
+    if(head == NULL)
+        return 0;
+    
+    int lheight = isBalancedTree(head->left);
+    int rheight = isBalancedTree(head->right);
+    
+    if((lheight == -1) || (rheight == -1) || abs(lheight-rheight) > 1)
+        return false;
+    
+    //return isBalancedTree(head->left) and isBalancedTree(head->right);
+    return 1+std::max(lheight, rheight);
+}
+
 void btree()
 {
 
@@ -1090,6 +1121,12 @@ void btree()
     
     void insToLeft(treeNode*, int);
     insToLeft(head, 4);
+    insToRight(head, 6);
+    insToLeft(head->left, 2);
+    insToRight(head->left, 6);
+    insToLeft(head->right, 1);
+    insToRight(head->right, 9);
+    /*
     insToRight(head->left, 10);
     insToLeft(head, 3);
     insToLeft(head, 2);
@@ -1100,7 +1137,7 @@ void btree()
     insToRight(head, 9);
     insToRight(head, 10);
     insToLeft(head, 0);
-    insToRight(head, -1);
+    insToRight(head, -1);*/
 
     
     void inorderTraversal(treeNode* list);
@@ -1117,6 +1154,9 @@ void btree()
     postOrderTraversal(head);
     cout  << endl;
     
+    cout << "Height of tree: " << heightOfTree(head) << endl;
+    
+    cout << "Is Balanced Tree: " << isBalancedTree(head) << endl;
 }
 
 void insertionSort()
@@ -1711,6 +1751,8 @@ void fileOpen()
     
 }
 
+// String functions/Manipulations
+
 void stringTest()
 {
     string str = "hello";
@@ -1744,7 +1786,7 @@ void stringTest()
     str.push_back('!');
     
     cout << str << endl;
-
+    
     str.pop_back();
     
     cout << str << endl;
@@ -1848,6 +1890,7 @@ void diamondProblem()
     
     D d;
     A a;
+    d.A::print();
     a.print();
     d.print();
 }
@@ -1924,16 +1967,20 @@ public:
 void operatorOverload()
 {
     operOver obj("Time is: ");
+    shared_ptr<operOver> sp = make_shared<operOver>("Shared");
+    unique_ptr<operOver> up = make_unique<operOver>("Unique");
     
+    cout << sp->s1 << endl;
     cout << obj+1400 << endl;
     cout << obj.operator+(1500) << endl;
     
 }
 
+
 void bitwiseTest()
 {
     std::bitset<8> i = 0b00011011;
-    
+
     cout << "Original : " << i << endl;
     cout << "Setting 3rd bit to 1: "<< (i | std::bitset<8>(1 << 2)) << endl;
     cout << "Clearing 3rd bit to 0: "<< (i & ~std::bitset<8>(1 << 2)) << endl;
@@ -2098,6 +2145,15 @@ void factorialTemplate()
 }
 
 // Own atoi function
+/*
+ 
+ ASCII
+ 
+ '0' - 48
+ 'a' - 97
+ 'A' - 65
+ 
+ */
 void myAtoi()
 {
     
@@ -2327,20 +2383,13 @@ void insertionSortOptimized()
 
 // TODO
 
-// Tree height
 // STL
-// Arista ques
 // searching
-// Whats the best alg/stl
-// Singleton and observer
-//Pointer to char and char pointer
-// String parsing
-// Trim whitespaces at beginning and end
-// Graphs -BFS, DFS
-// Binary tree - balanced or not
-// Tree traversals
+// Graphs - BFS, DFS
 // Check if a value exists along a path from root to leaf
-// Greater element variation array
+
+
+    // String parsing
 
 
 void decimalToBinary()
@@ -2461,7 +2510,6 @@ void aristaP2()
 
 // TODO
 
-// Tree height
 // STL
 // Arista ques
 // searching
@@ -2474,15 +2522,705 @@ void aristaP2()
 // Binary tree - balanced or not
 // Tree traversals
 // Check if a value exists along a path from root to leaf
-// Greater element variation array
 
+void greaterElement()
+{
+    
+    vector<int> input{3,1,4,5,6,3,2,6,2,5,7};
+    // op         4,4,5,6,7,6,6,7,5,7,0
+    
+    // Brute force way
+    cout << "Input: " << endl;
+    for(int k : input)
+        cout << " " << k ;
+    
+    cout << endl;
+    vector<int> result(input.size(), 0);
+    
+    for(int i = 0; i< input.size(); i++)
+    {
+        for(int j = i+1; j < input.size(); j++)
+        {
+            if(input[i] < input[j])
+            {
+                result[i] = input[j];
+                break;
+            }
+        }
+    }
+    
+    cout << " Result: " << endl;
+    for(int k : result)
+        cout << " " << k ;
+    
+    cout << endl;
+}
+
+    // Stack based
+
+void printStackPreservingOriginal(std::stack<int> s) { // Pass by value to create a copy
+    while (!s.empty()) {
+        std::cout << s.top() << " ";
+        s.pop();
+    }
+    std::cout << std::endl;
+}
+
+
+void greaterElementStackBased()
+{
+    stack<int> s;
+    vector<int> input{3,1,4,5,6,3,2,6,2,5,7};
+        // op         4,4,5,6,7,6,6,7,5,7,0
+    
+    cout << "Input: " << endl;
+    for(int k : input)
+        cout << " " << k ;
+    cout << endl;
+    vector<int> result(input.size(), 0);
+    
+    for(int index = input.size()-1; index >= 0 ; index--)
+    {
+
+        while(!s.empty() && s.top() <= input[index])
+            s.pop();
+        
+        if(s.empty())
+            result[index] = 0;
+        else
+            result[index] = s.top();
+        
+        s.push(input[index]);
+    }
+    
+    cout << " Result: " << endl;
+    for(int j : result)
+        cout << " " << j ;
+    
+    cout << endl;
+}
+
+template <typename T>
+class CircularBuffer {
+private:
+    vector<T> list;
+    int maxSize;
+    int startIndex;
+    int count;
+public:
+        // Constructor
+    CircularBuffer(size_t _capacity) :
+    maxSize(_capacity),
+    startIndex(0),
+    count(0)
+    {
+    }
+    
+        // Add an element to the buffer (write)
+    void push(const T& item) {
+        if(isFull())
+        {
+            cout << "Buffer is full" << endl;
+            return;
+        }
+        
+        list.push_back(item);
+        count++;
+    }
+    
+        // Remove an element from the buffer (read)
+    T pop() {
+        if(isEmpty())
+            cout << "Buffer is empty" << endl;
+        
+        auto item = list[startIndex];
+        count--;
+        startIndex = (startIndex+1)%maxSize;
+        return item;
+    }
+    
+        // Check if the buffer is empty
+    bool isEmpty() const {
+        return count == 0;
+    }
+    
+        // Check if the buffer is full
+    bool isFull() const {
+        return count == maxSize;
+    }
+    
+        // Get the current number of elements
+    size_t size() const {
+        return count;
+    }
+    
+        // Get the maximum capacity
+    size_t getCapacity() const {
+        return maxSize;
+    }
+};
+
+void circBuffer()
+{
+    
+    CircularBuffer<int> intArray(10);
+    
+    cout << "Size: " << intArray.size() << endl;
+
+    for(int i = 1; i <=10 ; i++)
+        intArray.push(i);
+
+    cout << "Size: " << intArray.size() << endl;
+    cout << "Capacity: " << intArray.getCapacity() << endl;
+
+    intArray.push(21);
+    cout << " pop: " << intArray.pop();
+    cout << "Size: " << intArray.size() << endl;
+    intArray.push(21);
+    cout << "Size: " << intArray.size() << endl;
+
+    
+
+
+}
+
+/*
+ 
+ decimal to hexadecimal -> mod 16 and divide by 16
+ decimal to binary -> mod 2 and divide by 2
+ 
+ hexdecimal to decimal -> last char * 16^0 + char-1 * 16^1...
+ binary to decimal -> last digit * 2^0 + last digit-1 * 2^1...
+ 
+ hexadecimal to binary -> No direct way, Either use switch case, or stl libs like stoul, bitset
+ binary to hexadecimal -> No direct way, Either use switch case, or stl libs like stoul, bitset
+ */
+void hexToBinaryNik()
+{
+    string s("16F");
+    cout << "Direct string to decimal " << stoul(s, nullptr, 16) << endl;
+    bitset<32> bin(stoul(s, nullptr, 16));
+    cout << "In Binary: " << bin << endl;
+
+    string s1("1111");
+    cout << "Direct string bin to decimal " << stoul(s1, nullptr, 2) << endl;
+
+    int result = 0;
+    int j =0;
+    for(int i = s.size()-1; i>=0; --i)
+    {
+        if(s[i] >= 'A' && s[i] <= 'F')
+        {
+            int temp = 10 + (s[i] - 'A');
+            cout << " hex temp value " << temp << endl;
+            result = result + temp*pow(16,j);
+            //result = result+pow(temp,i);
+            cout << " result value " << result << endl;
+
+            j++;
+        }
+        else
+        {
+            int temp = s[i] - '0';
+            cout << " int temp value " << temp << endl;
+
+            result = result + temp*pow(16,j);
+            cout << " result value " << result << endl;
+
+            j++;
+        }
+    }
+    cout << "result is : " << result << endl;
+}
+
+
+/*
+ Merge overlapping arrays
+ 
+ I/P:
+ (1,5),(3,7),(4,6),(6,8)
+ OP:
+ (1,8)
+ 
+ IP:
+ (10,12),(12,15)
+ OP:
+ (10,15)
+ 
+ IP:
+ (10,12),(12,15), (17,18)
+ OP:
+ (10,15)
+ 
+ IP:
+ (17,18),(10,12),(12,15),
+ OP:
+ (17,15)
+ 
+ */
+
+typedef struct MyPair
+{
+public:
+
+    int first;
+    int last;
+    
+    MyPair(int x, int y) :
+    first(x),
+    last(y)
+    {}
+}mp;
+
+mp checkIfOverlapping(vector<mp> pa)
+{
+    int finalFirst = 0;
+    int finalLast = 0 ;
+    int foundOverlap = 0;
+    
+    for(int i = 0; i < pa.size()-1; i++)
+    {
+        cout << "i: " << i << " size: " << pa.size()-2 << endl;
+        if(pa[i].last >= pa[i+1].first)
+        {
+            foundOverlap = 1;
+            if(finalFirst == 0)
+                finalFirst = pa[i].first;
+            
+            if(i == pa.size()-2)
+            {
+                cout << "setting finalLast" << endl;
+                finalLast = pa[i+1].last;
+            }
+        }
+        else if(foundOverlap == 1)
+        {
+            finalLast = pa[i].last;
+            break;
+        }
+    }
+    mp result(finalFirst, finalLast);
+
+    return result;
+}
+void overlappingArray()
+{
+    vector<mp> pairArray;
+    mp p1(10,12);
+    mp p2(12, 15);
+    mp p3(17, 18);
+    mp p4(6, 8);
+
+    pairArray.push_back(p1);
+    pairArray.push_back(p2);
+    pairArray.push_back(p3);
+    pairArray.push_back(p4);
+
+    auto result = checkIfOverlapping(pairArray);
+    
+    cout << " " << result.first << " " << result.last << endl;
+    
+}
+
+    //Reverse a single byte.
+
+void reverseByte()
+{
+    long num = 10011010;
+    long result = 0;
+    
+    while(num>0)
+    {
+        int temp = num%10;
+        
+        result = (result*10) + temp;
+        
+        num = num/10;
+    }
+    cout << " Result : " << result << endl;
+}
+
+/* Remove white spaces from a string.
+  use alg, erase along with remove
+  use remove_if , ::isspace
+  copy non space charactes to new string
+
+ */
+
+void removeWhiteSpaces()
+{
+    string s("  Hello   world!");
+    int shiftPlaces = 0;
+    int size = 0;
+    int origSize = s.size();
+    cout << " size: " << s.size() << endl;
+
+    
+    for(int i = 0 ;i < s.size() ; i++)
+    {
+        if (s[i] == ' ')
+        {
+            shiftPlaces = 1;
+            for(int j = i+1; j <s.size();j++)
+            {
+                if(s[j] != ' ')
+                {
+                    s[j-shiftPlaces] = s[j];
+                    //size--;
+                }
+                else
+                {
+                    shiftPlaces++;
+                }
+            }
+            size += shiftPlaces;
+            cout << "shiftPlaces: " << shiftPlaces << endl;
+        }
+    }
+    string s1;
+    s1 = s.substr(0, origSize - size);
+    cout << " size: " << size << endl;
+    cout << "String : " << s1<< endl;
+    
+    
+    // Optimzed
+    //Op1
+    string s2("  Hello   world!");
+    cout << "s2: " << s2 << endl;
+
+    s2.erase( std::remove(s2.begin(), s2.end(), ' '), s2.end());
+    cout << "s2: " << s2 << endl;
+    
+    //Op2
+    string s3("  Hello   world!");
+    cout << "s3: " << s3 << endl;
+    
+    s3.erase( std::remove_if(s3.begin(), s3.end(), [](char c ){ return c == ' ';}), s3.end());
+    cout << "s3: " << s3 << endl;
+    
+    //op3
+    string s4("  Hello   world!  ");
+    int startIndex = 0;
+    for(char c : s4)
+    {
+        if(c == ' ')
+            startIndex++;
+        else
+            break;
+    }
+    cout << "s4: " << s4 << endl;
+
+    //std::erase(s4, ' '); cpp20
+    auto it = std::remove_if(s4.begin(), s4.end(),
+    [](char c)
+    {
+        return c == ' ';
+    });
+    cout << "s4: " << s4 << endl;
+
+    s4.erase(it, s4.end());
+    cout << "s4: " << s4 << endl;
+
+}
+/*
+ Reverse every word in a string. Example: "Lord is Great" should be displayed as "droL si taerG".
+ */
+
+void revString()
+{
+    string s("Lord is Great");
+    cout << "s: " << s << endl;
+
+    int startIndex{255};
+    
+    for(int i = 0; i < s.size(); i++)
+    {
+        if(s[i] == ' ' || i+1 == s.size())
+        {
+            cout << " startInd: " << startIndex << endl;
+            std::reverse(s.begin() + startIndex, s.begin()+i);
+            startIndex = 255;
+        }
+        else if(s[i] != ' ')
+        {
+            if(startIndex == 255)
+                startIndex = i;
+            continue;
+        }
+    }
+    
+    cout << "revString s: " << s << endl;
+    
+    // using stack?
+    std::stack<char> myStack;
+    string s1("Lord is Great");
+
+    cout << "Using Stack" << endl;
+    for(char c : s1)
+    {
+        cout<< "pushing c: " << c << endl;
+        myStack.push(c);
+    }
+    
+    cout << "Size: " << myStack.size() << endl;
+    //for(int i = 0; i < myStack.size(); i++)
+    while(!myStack.empty())
+    {
+        //.char item = ;
+        cout << " " <<  myStack.top() << " " ;
+
+        myStack.pop();
+
+    }
+    cout <<endl;
+    
+    }
+
+/*
+
+ Check if words are anagrams
+ a word, phrase, or name formed by rearranging the letters of another, such as spar, formed from rasp.
+ 
+ diff between threads and processes in tech sense
+ 
+ deck of cards in hand.top card on the table, next top card to the bottom of deck
+ 
+ static vs volatile
+ 
+ struct vs union. Calc memory
+ 
+ alg to find max sum of non adjacent elements in an array
+ 
+ bit manip using 2s compliment
+ any other bitmanip programs
+ 
+ find out size of struct using own func
+ 
+ https://www.techinterviewhandbook.org/grind75/
+ 
+ https://www.pramp.com/
+ 
+ */
+
+
+
+// Check if words are anagrams
+//a word, phrase, or name formed by rearranging the letters of another, such as spar, formed from rasp.
+bool checkAnagrams()
+{
+    string s1("rasp");
+    string s2("spar");
+    
+    if(s1.size() != s2.size())
+        return false;
+    
+    std::sort(s1.begin(), s1.end());
+    std::sort(s2.begin(), s2.end());
+
+    return s1 == s2;
+}
+
+/*
+ https://www.geeksforgeeks.org/dsa/top-100-data-structure-and-algorithms-dsa-interview-questions-topic-wise/
+ 
+
+ 
+Find Closest to n and Divisible by m
+Last Updated : 09 Jul, 2025
+Given two integers n and m (m != 0). Find the number closest to n and divisible by m. If there is more than one such number, then output the one having maximum absolute value.
+
+Examples:
+
+Input: n = 13, m = 4
+Output: 12
+Explanation: 12 is the closest to 13, divisible by 4.
+*/
+
+
+/*
+ Given two integers a1 and a2, the first and second terms of an Arithmetic Series respectively, the problem is to find the nth term of the series.
+ Examples :
+ 
+ Input : a1 = 2,  a2 = 3,  n = 4
+ Output : 5
+ Explanation : The series is 2, 3, 4, 5, 6, ....   , thus the 4th term is 5.
+ 
+ Input : a1 = 1, a2 = 3, n = 10
+ Output : 19
+ Explanation:  The series is: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21..... Thus,10th term is 19.
+ */
+
+
+/*
+ Given an array arr[] of n integers and a target value, check if there exists a pair whose sum equals the target. This is a variation of the 2-Sum problem.
+ 
+ Examples:
+ 
+ Input: arr[] = [0, -1, 2, -3, 1], target = -2
+ Output: true
+ Explanation: There is a pair (1, -3) with the sum equal to given target, 1 + (-3) = -2.
+ 
+ Input: arr[] = [1, -2, 1, 0, 5], target = 0
+ Output: false
+ Explanation: There is no pair with sum equals to given target.
+ */
+
+/*
+ Given an array prices[] of length N, representing the prices of the stocks on different days, the task is to find the maximum profit possible by buying and selling the stocks on different days when at most one transaction is allowed. Here one transaction means 1 buy + 1 Sell.
+ 
+ Note: Stock must be bought before being sold.
+ 
+ Examples:
+ 
+ Input: prices[] = {7, 10, 1, 3, 6, 9, 2}
+ Output: 8
+ Explanation: Buy for price 1 and sell for price 9.
+ 
+ Input: prices[] = {7, 6, 4, 3, 1}
+ Output: 0
+ Explanation: Since the array is sorted in decreasing order, 0 profit can be made without making any transaction.
+ 
+ Input: prices[] = {1, 3, 6, 9, 11}
+ Output: 10
+ Explanation: Since the array is sorted in increasing order, we can make maximum profit by buying at price[0] and selling at price[n-1]
+ 
+ */
+
+/*
+ Product of Array Except Self
+ Last Updated : 23 Jul, 2025
+ Given an array arr[] of n integers, construct a product array res[] (of the same size) such that res[i] is equal to the product of all the elements of arr[] except arr[i].
+ 
+ Example:
+ 
+ Input: arr[] = [10, 3, 5, 6, 2]
+ Output: [180, 600, 360, 300, 900]
+ Explanation:
+ 
+ For i=0, res[i] = 3 * 5 * 6 * 2 is 180.
+ For i = 1, res[i] = 10 * 5 * 6 * 2 is 600.
+ For i = 2, res[i] = 10 * 3 * 6 * 2 is 360.
+ For i = 3, res[i] = 10 * 3 * 5 * 2 is 300.
+ For i = 4, res[i] = 10 * 3 * 5 * 6 is 900.
+ Input: arr[] = [12, 0]
+ Output: [0, 12]
+ Explanation:
+ 
+ For i = 0, res[i] = 0.
+ For i = 1, res[i] = 12.
+ */
+
+
+/*
+ Container with Most Water
+ Last Updated : 12 Aug, 2025
+ Given an array arr[] of non-negative integers, where each element arr[i] represents the height of the vertical lines, find the maximum amount of water that can be contained between any two lines, together with the x-axis.
+ 
+ Examples :
+ 
+ Input: arr[] = [1, 5, 4, 3]
+ Output: 6
+ Explanation: 5 and 3 are 2 distance apart. So the size of the base = 2. Height of container = min(5, 3) = 3. So total area = 3 * 2 = 6.
+ 
+ Input: arr[] = [3, 1, 2, 4, 5]
+ Output: 12
+ Explanation: 5 and 3 are 4 distance apart. So the size of the base = 4. Height of container = min(5, 3) = 3. So total area = 4 * 3 = 12.
+ 
+ Input: arr[] = [2, 1, 8, 6, 4, 6, 5, 5]
+ Output: 25
+ Explanation: 8 and 5 are 5 distance apart. So the size of the base = 5. Height of container = min(8, 5) = 5. So, total area = 5 * 5 = 25.
+ */
+
+/*
+ Container with Most Water
+ Last Updated : 12 Aug, 2025
+ Given an array arr[] of non-negative integers, where each element arr[i] represents the height of the vertical lines, find the maximum amount of water that can be contained between any two lines, together with the x-axis.
+ 
+ Examples :
+ 
+ Input: arr[] = [1, 5, 4, 3]
+ Output: 6
+ Explanation: 5 and 3 are 2 distance apart. So the size of the base = 2. Height of container = min(5, 3) = 3. So total area = 3 * 2 = 6.
+ 
+ Input: arr[] = [3, 1, 2, 4, 5]
+ Output: 12
+ Explanation: 5 and 3 are 4 distance apart. So the size of the base = 4. Height of container = min(5, 3) = 3. So total area = 4 * 3 = 12.
+ 
+ Input: arr[] = [2, 1, 8, 6, 4, 6, 5, 5]
+ Output: 25
+ Explanation: 8 and 5 are 5 distance apart. So the size of the base = 5. Height of container = min(8, 5) = 5. So, total area = 5 * 5 = 25.
+ */
+
+/*
+ Maximum Subarray Sum - Kadane's Algorithm
+ Last Updated : 22 Jul, 2025
+ Given an integer array arr[], find the subarray (containing at least one element) which has the maximum possible sum, and return that sum.
+ Note: A subarray is a continuous part of an array.
+ 
+ Examples:
+ 
+ Input: arr[] = [2, 3, -8, 7, -1, 2, 3]
+ Output: 11
+ Explanation: The subarray [7, -1, 2, 3] has the largest sum 11.
+ 
+ Input: arr[] = [-2, -4]
+ Output: -2
+ Explanation: The subarray [-2] has the largest sum -2.
+ 
+ Input: arr[] = [5, 4, 1, 7, 8]
+ Output: 25
+ Explanation: The subarray [5, 4, 1, 7, 8] has the largest sum 25.
+ */
+
+vector<int> maxSubarraySum()
+{
+    vector<int> arr{2, 3, -8, 7, -1, 2, 3};
+    int tempStart = 0;
+    int startIndex = 0;
+    int endIndex = 0;
+    int maxSum = arr[0];
+    int resSum = 0;
+    
+    for(int i = 1; i < arr.size(); i++)
+    {
+        maxSum += arr[i];
+        //maxSum = max(arr[i], maxSum + arr[i]);
+        
+        //resSum = max(maxSum, resSum);
+        
+        if(arr[i] > maxSum)
+        {
+            tempStart = i;
+            maxSum = arr[i];
+        }
+        
+        if(maxSum > resSum)
+        {
+            resSum = maxSum;
+            startIndex = tempStart;
+            endIndex = i;
+        }
+    }
+    
+    cout << "Max value is " << resSum << endl;
+    vector<int> result(arr.begin()+startIndex , arr.begin()+endIndex+1);
+
+    for(int k : result)
+    {
+        cout << " " << k;
+    }
+    cout << endl;
+    return result;
+    
+}
 
 
 int main()
 {
     
     
-
+    //revString();
+    cout << " checkAnagrams: " << checkAnagrams() << endl;
     
     return 0;
 }
