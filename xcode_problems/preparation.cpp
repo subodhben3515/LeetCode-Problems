@@ -2988,13 +2988,14 @@ void revString()
  static vs volatile
  
  struct vs union. Calc memory
+ find out size of struct using own func
+
  
  alg to find max sum of non adjacent elements in an array
  
  bit manip using 2s compliment
  any other bitmanip programs
  
- find out size of struct using own func
  
  https://www.techinterviewhandbook.org/grind75/
  
@@ -3018,7 +3019,115 @@ bool checkAnagrams()
     std::sort(s2.begin(), s2.end());
 
     return s1 == s2;
+//    vector<int> a{1,2,3};
+//    vector<int> b{1,2,3};
+//    
+//    return a == b;
+
 }
+
+/*
+ a deck of cards where top card in kept on table and next top at the bottom of deck. Repeat this until deck is empty. Then take the deck from the table and put it in your hand. This is considered as one cycle. After how many cycles does the deck comes to original position c++
+ */
+
+void cycle(vector<int> &hand)
+{
+    vector<int> table;
+
+    while(true)
+    {
+        if(!hand.empty())
+        {
+            table.push_back(hand[0]);
+            hand.erase(hand.begin());
+        }
+        
+        if(!hand.empty())
+        {
+            hand.push_back(hand[0]);
+            hand.erase(hand.begin());
+        }
+        
+        if(hand.empty())
+        {
+            hand = table;
+            break;
+        }
+    }
+    
+
+    
+    
+}
+
+bool isOriginalOrder(vector<int> &deck, vector<int> &originalDeck)
+{
+    return deck == originalDeck;
+}
+
+void deckOfCards()
+{
+    vector<int> deck;
+    for(int i = 1; i<=52; i++)
+        deck.push_back(i);
+    
+    vector<int> originalDeck = deck;
+    int numOfCycles = 0;
+    
+    do
+    {
+        cycle(deck);
+        numOfCycles++;
+        
+    } while(!isOriginalOrder(deck, originalDeck));
+    
+    cout << " Number of cycles: " <<numOfCycles << endl;
+}
+
+/*
+ struct vs union. Calc memory
+ find out size of struct using own func
+ */
+struct st
+{
+    int a;
+    int b;
+    bool c;
+};
+
+union stu
+{
+    int a;
+    int b;
+    bool c;
+};
+
+template <typename T>
+int mySize(T a)
+{
+    return (char*)(&a+1) - (char*)(&a);
+}
+
+void findSize()
+{
+    st s;
+    stu stus;
+    
+    cout << "Mysize: " << mySize<st>(s) << endl;
+    cout << "Mysize: " << mySize<stu>(stus) << endl;
+
+    
+}
+
+/*
+ alg to find max sum of non adjacent elements in an array
+
+ */
+void algMaxNonAdjSum()
+{
+    
+}
+
 
 /*
  https://www.geeksforgeeks.org/dsa/top-100-data-structure-and-algorithms-dsa-interview-questions-topic-wise/
@@ -3026,7 +3135,6 @@ bool checkAnagrams()
 
  
 Find Closest to n and Divisible by m
-Last Updated : 09 Jul, 2025
 Given two integers n and m (m != 0). Find the number closest to n and divisible by m. If there is more than one such number, then output the one having maximum absolute value.
 
 Examples:
@@ -3219,12 +3327,309 @@ int main()
 {
     
     
-    //revString();
-    cout << " checkAnagrams: " << checkAnagrams() << endl;
+    findSize();
+//    cout << " checkAnagrams: " << checkAnagrams() << endl;
     
     return 0;
 }
 
+// Apple Interview
+/*
+ #include <stdio.h>
+ #include "stdlib.h"
+
+ // To execute C, please define "int main()"
+ #pragma pack(1)
+ struct myStruct -> 9 bytes
+ {
+ int data; -> 4
+ char c; -> 1
+ float f : 16 ; - > 4
+ };
+ 
+ gdb
+ 
+ 0x0         data
+ 0x4 offset  c
+ page 2kb -> packet 1500 b (IP MTU)
+ huge pages 2mb
+ 
+ union myUnion -> 4
+ {
+ int socket1;
+ int socket2;
+ float f;
+ };
+ 
+ 
+ a1
+ a2
+ 
+ 
+ union
+ {
+ struct u1
+ struct u2
+ 
+ }
+ 
+ socket2=40
+ socket1
+ 
+ myUnion.data = 5
+ 
+ */
+/*
+ [Q1]:  Given two sorted arrays, A (length m) and B (length n), where A[] has enough empty space at the end to hold all elements of B[]. Provide a C function void to merge B[] into Asuch that the resultant array A[] of size m+n remains sorted.
+ 
+ e.g  Input: A=[1,5,8,null,null,null], m=3. Input: B=[2,6,9], n=3. Output: A=[1,2,5,6,8,9].
+ 
+ */
+/*
+ Merge A with B
+ Merged A with all el
+ sort A*/
+/*
+ void mergeAndSort()
+ {
+ int A[] = {1,5,8,0,0,0};
+ int m = 3;
+ int B[] = {2,6,9};
+ //int n = 3;
+ int j =0;
+ 
+ // Merge B to A
+ for(int i = m; i < 6; i++)
+ {
+ A[i] = B[j];
+ j++;
+ }
+ 
+ int sizeOfA = sizeof(A)/sizeof(int);
+ 
+ // bubble sort
+ for(int i = 0; i< sizeOfA; i++ )
+ {
+ for(int j = i+1 ; j < sizeOfA-1; j++)
+ {
+ if(A[i] > A[j])
+ {
+ int temp = A[i];
+ A[i] = A[j];
+ A[j] = temp;
+ }
+ }
+ }
+ 
+ printf("Sorted list is: \n");
+ for(int k = 0; k < sizeOfA; k++)
+ printf(" %d\t", A[k] );
+ 
+ }
+ 
+ int main()
+ {
+ 
+ mergeAndSort();
+ 
+ return 0;
+ 
+ }
+ */
+
+
+/*
+ QUestion 2:
+ 
+ Input: 1 -> 2 -> 3 -> 4 -> 5 -> 6->NULL
+ Output: 1 -> 3 -> 5 -> 2 -> 4 ->6-> NULL
+ 
+ Input: 1 -> 2 -> 3 -> 4 -> 5 -> 6->NULL
+ 
+ 
+ extractOddNodes()
+ 1->3->5->NULL
+ 
+ extractEvenNodes()
+ 2->4->6->NULL
+ 
+ Merge
+ 5's tail to be merged to head of evenNodes.
+ */
+/*
+typedef struct Node
+{
+    int data;
+    struct Node* next;
+    
+        //Node(): data(0), next(NULL);
+    
+}Node;
+
+void createLL(Node* head)
+{
+    
+    printf("Inside createLL\n");
+    if(head->next == NULL)
+    {
+        int temp = 0;
+        printf("Insert element:, To stop inserting use -1\n");
+        scanf("%d", &temp);
+        
+            // Stop inserting elements
+        if(temp == -1)
+            return;
+        
+        head->next = (Node*)malloc(sizeof(Node));
+        head->next->data = temp;
+        head->next->next = NULL;
+        
+        createLL(head->next);
+    }
+    
+}
+
+Node* extractEvenNodes(Node* head)
+{
+    Node* oddNodes = NULL;//(Node*)malloc(sizeof(Node));
+    Node* headOddNodes;// = oddNodes;
+    
+    int index = 1;
+    
+    while (head!= NULL) {
+        head = head->next;
+        if(head == NULL)
+        {
+            printf("returning from evenNodes\n");
+            return headOddNodes;
+            
+        }
+        printf("data is: %d", head->data);
+        index++;
+        
+        if(index%2 == 0)
+        {
+            if(oddNodes == NULL)
+            {
+                oddNodes = (Node*)malloc(sizeof(Node));
+                oddNodes->data = head->data;
+                oddNodes->next = NULL;
+                headOddNodes = oddNodes;
+            }
+            else
+            {
+                if (oddNodes->next == NULL) {
+                    oddNodes->next = (Node*)malloc(sizeof(Node));
+                    oddNodes = oddNodes->next;
+                    oddNodes->data = head->data;
+                    oddNodes->next = NULL;
+                }
+            }
+                //oddNodes = (Node*)malloc(sizeof(Node));
+            if(oddNodes->next == NULL)
+             {
+             oddNodes->next = (Node*)malloc(sizeof(Node));
+             oddNodes = oddNodes->next;
+             }
+             
+             oddNodes->data = head->data;
+             oddNodes->next = NULL;//(Node*)malloc(sizeof(Node));
+                                     //ddNodes = oddNodes->next;
+                                     //oddNodes = oddNodes->next;
+                                     // oddNodes->data =
+                                     // head->data;
+                                     //oddNodes->next = NULL;
+        }
+    }
+    return headOddNodes;
+    
+}
+
+Node* extractOddNodes(Node* head)
+{
+    printf("Inside extractOddNodes\n");
+    Node* oddNodes = (Node*)malloc(sizeof(Node));
+    Node* headOddNodes = oddNodes;
+    oddNodes->data = head->data;
+    oddNodes->next = NULL;
+    int index = 1;
+    
+    while (head!= NULL) {
+        head = head->next;
+        if(head == NULL)
+        {
+            printf("returning from evenNodes\n");
+            return headOddNodes;
+            
+        }
+        index++;
+        
+        if(index%2 != 0)
+        {
+            oddNodes->next = (Node*)malloc(sizeof(Node));
+            oddNodes = oddNodes->next;
+            oddNodes->data = head->data;
+            oddNodes->next = NULL;
+        }
+    }
+    return headOddNodes;
+}
+
+void printLL(Node* head)
+{
+    
+    while (head != NULL) {
+        
+        printf("%d --> ", head->data);
+        head = head->next;
+    }
+}
+
+void LL(Node* head)
+{
+    printLL(head);
+    
+    Node* oddHead = extractOddNodes(head);
+    printf("printing oddHead\n");
+    printLL(oddHead);
+    printf("\n");
+    
+    
+    Node* evenHead = extractEvenNodes(head);
+    printf("printing evenHead\n");
+    printLL(evenHead);
+    printf("\n");
+    
+    
+    
+    Node* tailOfOdd = oddHead;
+    
+        // Merge even at the end
+    while(oddHead->next != NULL)
+    {
+        oddHead = oddHead->next;
+    }
+    
+    oddHead->next = evenHead;
+    printf("\n");
+    printLL(tailOfOdd);
+    printf("\n");
+    
+    
+}
+
+int main()
+{
+    Node* head = (Node*)malloc(sizeof(Node));
+    head->data=1;
+    head->next=NULL;
+    createLL(head);
+    LL(head);
+    
+    return 0;
+    
+}
+ */
 /*
  
  vector<int> monthToDays(13, 31);
