@@ -1,0 +1,1 @@
+https://www.geeksforgeeks.org/dsa/sentence-palindrome-palindrome-removing-spaces-dots-etc/#naive-approach-comparing-original-and-reversed-strings-on-time-and-on-space

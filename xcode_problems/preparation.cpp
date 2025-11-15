@@ -3121,13 +3121,208 @@ void findSize()
 
 /*
  alg to find max sum of non adjacent elements in an array
+ find all indices also
 
  */
 void algMaxNonAdjSum()
 {
+    array<int, 10> arr{5,1,5,1,1,7,1,1,9,0};
+    
+    vector<int> dp(arr.size(), 0);
+    
+    dp[0] = arr[0];
+    dp[1] = arr[1];
+    
+    for(int i = 2 ; i < arr.size(); i++)
+    {
+        dp[i] = max(dp[i-1], arr[i]+dp[i-2]);
+    }
+    
+    cout << "Max value is: " << dp[arr.size()-1] << endl;
     
 }
 
+void twosCompliment()
+{
+    
+}
+
+/*
+ 1. Two Sum
+ Solved
+ Easy
+ 
+ Topics
+ premium lock icon
+ Companies
+ 
+ Hint
+ Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+ 
+ You may assume that each input would have exactly one solution, and you may not use the same element twice.
+ 
+ You can return the answer in any order.
+ 
+ 
+ 
+ Example 1:
+ 
+ Input: nums = [2,7,11,15], target = 9
+ Output: [0,1]
+ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+ Example 2:
+ 
+ Input: nums = [3,2,4], target = 6
+ Output: [1,2]
+ Example 3:
+ 
+ Input: nums = [3,3], target = 6
+ Output: [0,1]
+ 
+ 
+ Constraints:
+ 
+ 2 <= nums.length <= 104
+ -109 <= nums[i] <= 109
+ -109 <= target <= 109
+ Only one valid answer exists.
+ 
+ 
+ Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
+ */
+
+vector<int> TwoSum()
+{
+    vector<int> arr{2,7,11,15};
+    int target = 9;
+    
+    unordered_map<int, int> hash;
+    
+    for(int i = 0; i < arr.size(); i++)
+    {
+        int toFind = target - arr[i];
+        
+        auto it = hash.find(toFind);
+        if(it != hash.end())
+        {
+            cout << "Foound solution" << endl;
+            return {i , it->second};
+        }
+        cout << "Inserting i: " << i << " arr[i]: " << arr[i] << endl;
+        hash.insert({arr[i], i});
+        
+    }
+    return {};
+}
+
+bool validParanthesis()
+{
+    string s = "([}}])";
+    if(s.length() % 2 != 0)
+        return false;
+    
+
+    auto isClosingBrace = [](char c )
+    {
+        return c == ')' || c == '}' || c == ']';
+    };
+    
+    auto addOpp = [](char c)
+    {
+        if(c == '(')
+            return ')';
+        else if (c == '{')
+            return '}';
+        else if (c == '[')
+            return ']';
+        else
+            return c;
+    };
+    
+    stack<char> st;
+    for(char ch : s) //([}}])
+    {
+        if(st.empty())
+        {
+                //cout << "Inserting: " << ch;
+            if(isClosingBrace(ch))
+                return false;
+            
+            cout << "Pushing ch: "<< ch << endl;
+            st.push(addOpp(ch));
+            continue;
+        }
+        else
+        {
+            if(isClosingBrace(ch))
+            {
+                auto tmp = st.top();
+                cout << "Comparing tmp: " << tmp << " ch: " << ch << endl;
+                if(tmp == ch)
+                {
+                    cout << "Popping because equal tmp: "<< tmp << "ch: " << ch <<endl;
+                    st.pop();
+                }
+                return false;
+            }
+            else
+                cout << "Pushing ch: "<< ch << endl;
+                st.push(addOpp(ch));
+            
+                // cout << "Comparing tmp: " << tmp << " ch: " << ch  << "diff: " << ch-tmp << endl;
+                // if((ch - tmp != 1) && (ch - tmp != 2))
+                // {
+                //     return false;
+                // }
+                // st.pop();
+        }
+    }
+    if(st.empty())
+        return true;
+    else
+        return false;
+}
+
+/*
+ [Q1]:  Given two sorted arrays, A (length m) and B (length n), where A[] has enough empty space at the end to hold all elements of B[]. Provide a C function void to merge B[] into Asuch that the resultant array A[] of size m+n remains sorted.
+ 
+ e.g  Input: A=[1,5,8,null,null,null], m=3. Input: B=[2,6,9], n=3. Output: A=[1,2,5,6,8,9].
+ 
+ */
+
+void mergeSortedArray()
+{
+    int A[6] = {1,5,8,0,0,0};
+    int m = 3;
+    int B[3] = {2,6,9};
+    int n = 3;
+    int k = m+n-1;
+    int i = m-1;
+    int j = n-1;
+    
+    while(i>=0 && j>=0)
+    {
+        if(A[i] > B[j])
+        {
+            A[k--] = A[i--];
+        }
+        else
+            A[k--] = B[j--];
+    }
+    
+    // copy any leftover elements from B array
+    while(j>=0)
+    {
+        A[k--] = B[j--];
+    }
+    
+        
+    for(int x: A)
+        cout << " " << x ;
+    cout << endl;
+}
+    
+    
 
 /*
  https://www.geeksforgeeks.org/dsa/top-100-data-structure-and-algorithms-dsa-interview-questions-topic-wise/
@@ -3327,8 +3522,12 @@ int main()
 {
     
     
-    findSize();
-//    cout << " checkAnagrams: " << checkAnagrams() << endl;
+    //mergeSortedArray();
+//    auto i = TwoSum();
+//    for(int j: i)
+//        cout << " " << j << endl;
+//    cout << endl;
+    cout << " validParanthesis: " << validParanthesis() << endl;
     
     return 0;
 }
