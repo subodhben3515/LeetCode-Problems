@@ -1,0 +1,3 @@
+Use 2 stacks
+1 stack to store all elements
+1 stack to keep track of min element at each insertion
