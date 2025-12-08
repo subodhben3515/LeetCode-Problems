@@ -28,12 +28,16 @@ Quick Notes:
 
 Available API's:
 sort(arr, arr.size())
+swap(a, b); --> swap(T& a, T& b)
+
 
 
 Quick Tips:
 Reverse a String:
     - Insert into stack<char>; top() -> pop() till empty()
-    - reverse(s.begin(), s.begin()+endIndex)
+    - reverse(s.begin(), s.end()) or reverse(s.rbegin(), s.rend())
+    - Two pointer tech
+    - Recursive func call with swap
 */
 //s
 
