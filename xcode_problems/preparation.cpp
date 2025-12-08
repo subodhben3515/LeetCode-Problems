@@ -2412,6 +2412,32 @@ void decimalToBinary()
     cout << endl;
 }
 
+void decToBin()
+{
+    int i = 12345;
+    constexpr int MAX_BIT_SIZE=32;
+    int arr[MAX_BIT_SIZE]{0};
+    int index=0;
+    
+    for(int j = MAX_BIT_SIZE-1; j >=0; --j)
+    {
+        arr[index] = (i >> j) & 1;
+        index++;
+    }
+    cout <<"Binary rep: " << endl;
+    
+    bool started  = false;
+    for(int z : arr)
+    {
+        if(z != 0)
+            started = true;
+        
+        if(started == true)
+            cout<<z;
+    }
+    cout << endl;
+    
+}
 /*
  
  Arista P2
@@ -2694,6 +2720,19 @@ void circBuffer()
  
  hexadecimal to binary -> No direct way, Either use switch case, or stl libs like stoul, bitset
  binary to hexadecimal -> No direct way, Either use switch case, or stl libs like stoul, bitset
+ 
+ Bitwise Manip:
+ 
+ 1's compliment -> ~X
+ 2's Compliment -> ~X+1 (or) -X
+ 
+ Get lowest set bit -> X & -X
+ Strip lowest set bit -> X & (X-1) // (X-1)  inverts all the bits till it encounters the lowest set '1' and it also inverts that lowest set '1'.
+ 
+ sum = a|b (if there is no carry)
+ else sum is without + with carry
+ carry = (a & b) << 1
+
  */
 void hexToBinaryNik()
 {
@@ -3323,7 +3362,90 @@ void mergeSortedArray()
 }
     
     
+bool adjacentSet(int n)
+{
+    return (n & (n >> 1));
+}
 
+/*
+
+ Function A which declares a pointer.
+ Function B allocates the pointer.
+ Function C assign a value to the pointer
+ Function D print a value of the pointer
+ Function E frees the pointer
+ */
+void funcB(int** p)
+{
+    *p = (int*)malloc(sizeof(int));
+    
+}
+
+void funcC(int* p)
+{
+    *p = 2;
+    
+}
+
+void funcD(int* p)
+{
+    cout << "Value is: " << *p << endl;
+    
+}
+
+void funcE(int** p)
+{
+    free(*p);
+    *p = NULL;
+}
+
+void funcA()
+{
+    int *p = NULL;
+    
+    //cout << *p;
+    funcB(&p);
+    funcC(p);
+    funcD(p);
+    cout << "Before free p: " << *p << endl;
+
+    funcE(&p);
+    
+    //cout << "After free p: " << *p << endl;
+    //if(*p == NULL)
+    //{
+    //    cout << "Really freed" << endl;
+    //}
+
+}
+
+
+
+/*
+ Apple Interview
+ 
+ R1
+ Merge 2 sorted arrys into a single one
+ In a SLL, place odd index elements first and then even element indexes
+ 
+ R2
+ Own Sizeof functin
+ How many bits have to be changed to turn A into B (A ^ B) Count 1's
+ 
+ R3
+ Write
+ Function A which declares a pointer.
+ Function B allocates the pointer.
+ Function C assign a value to the pointer
+ Function D print a value of the pointer
+ Function E frees the pointer
+ Whether binary number is a palindrome or not
+ 
+ R4
+ Check whether adjacent bits are set or not (n & (n >> 1))
+ 
+ 
+ */
 /*
  https://www.geeksforgeeks.org/dsa/top-100-data-structure-and-algorithms-dsa-interview-questions-topic-wise/
  
@@ -3517,6 +3639,50 @@ vector<int> maxSubarraySum()
     
 }
 
+node* createMyLL()
+{
+    node* dummyHead = new node{0, nullptr};
+    node* tail = dummyHead;
+    int n = 0;
+    cout << "Enter elem to ins" << endl;
+    while(cin >> n && n != -1)
+    {
+        node* newTail = new node{n , nullptr};
+        tail->next = newTail;
+        tail = newTail;
+    }
+    
+    node* realHead = dummyHead->next;
+    free(dummyHead);
+    return realHead;
+    
+}
+
+void removeDupLL(node* head)
+{
+    if(head == NULL)
+        return;
+    
+    while(head->next!=NULL)
+    {
+        if(head->number == head->next->number)
+        {
+            head->next = head->next->next;
+        }
+        else
+            head = head->next;
+    }
+}
+
+void removeDupLL()
+{
+    
+    node* head = createMyLL();
+    printList(head);
+    removeDupLL(head);
+    printList(head);
+
+}
 
 int main()
 {
@@ -3527,8 +3693,9 @@ int main()
 //    for(int j: i)
 //        cout << " " << j << endl;
 //    cout << endl;
-    cout << " validParanthesis: " << validParanthesis() << endl;
-    
+    //1101
+    //cout << " funcA: " << funcA() << endl;
+    decToBin();
     return 0;
 }
 
