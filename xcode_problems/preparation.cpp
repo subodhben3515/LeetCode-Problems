@@ -22,6 +22,19 @@
 
 
 using namespace std;
+
+/*
+Quick Notes:
+
+Available API's:
+sort(arr, arr.size())
+
+
+Quick Tips:
+Reverse a String:
+    - Insert into stack<char>; top() -> pop() till empty()
+    - reverse(s.begin(), s.begin()+endIndex)
+*/
 //s
 
 // C Program for
