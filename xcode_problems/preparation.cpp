@@ -26,20 +26,353 @@ using namespace std;
 /*
 Quick Notes:
 
+Check what Type it is:
+    std::isspace(' ')
+    isdigit('1')
+    isalpha('A')
+    isalnum('2')
+    islower('a')
+    isupper('A')
+    tolower('A')
+    toupper('a')
+    
+ 
 Available API's:
-sort(arr, arr.size())
-swap(a, b); --> swap(T& a, T& b)
+    sort(arr, arr.size())
+    sort(arr, arr.size(), std::greater<int>())
+    sort(arr, arr.size(), std::less<int>())
+    sort(arr.begin(), s.end(), [](const int& x, const in& y){ return x < y;})
 
+    swap(a, b); --> swap(T& a, T& b)
+ 
+    find(s.begin(), s.end(), 'c')
+    find_if(s.begin(), s.end(), [](const char& a){return a=='x'; })
+ 
+    erase(arr, 'a')
+    erase_if(arr, [](const char& x){return (x-'0') % 2 == 0})
+ 
+     std::count_if(s.begin(), s.end(),
+     [](unsigned char c){ return std::isdigit(c); } // correct
+     );
+
+    std::remove(s2.begin(), s2.end(), ' ')
+ 
+    std::reverse(v.begin(), v.end());
+ 
+    to_string(1023)
+
+    itoa(list.begin(), list.end(), -4)
+    Fills the range [first, last) with sequentially increasing values, starting with value and repetitively evaluating ++value.
 
 
 Quick Tips:
 Reverse a String:
     - Insert into stack<char>; top() -> pop() till empty()
     - reverse(s.begin(), s.end()) or reverse(s.rbegin(), s.rend())
-    - Two pointer tech
+    - Two pointer technique
     - Recursive func call with swap
+ 
+Split a String:
+    - Use Stringstream.     stringstream ss(str) and while(getline(ss, tempStr, del))
+    - Use String tokenizer (strtok).  char *t = strtok(str, "-");   while(t!=NULL) printf(" % s\n", token);
+      token = strtok(NULL, " - ");
+    - Use find to point to delimeter. s.substr(0, s.find(delimiter)) while loop
+
+String API's:
+ s2.erase( std::remove(s2.begin(), s2.end(), ' '), s2.end());
+
+ cout << str.size() << endl;
+ cout << str1.length() << endl;
+ 
+ string result = str + " " + str1;
+  
+ r2.append(str1);
+ 
+ str.push_back('!');
+  
+ str.pop_back();
+  
+ str.insert( 5, " Subodh");
+ 
+ str.erase(5, 7);
+ 
+ string myStr = str.substr(6, 6); // std::string substr(size_t pos = 0, size_t len = npos) const;
+ 
+ cout << myStr << endl;
+  
+ auto pos = myStr.find("oh");
+ 
+ if(pos < myStr.length())
+ cout << "Found String" << endl;
+ else
+ cout << "String doesn't exist" << endl;
+ 
+ if(strstr(str, "simple") != NULL)
+ 
+ // replace -- many overloads.
+ 
+ myStr.replace(0, 3 , 3, '?');
+ 
+ // Comparision
+ 
+ if(r4 == r3)
+ cout << "Same strings" << endl;
+ else
+ cout << " different" << endl;
+ 
+ if(r3.compare(r4) == 0)
+ cout << "Same" << endl;
+ else
+ cout << "Different" << endl;
+ 
+C++ Containers:
+Vector API's:
+
+ // Element access
+ at - access specified element with bounds checking
+ operator[] - access specified element
+ front - access the first element
+ back - access the last element
+ data - direct access to the underlying contiguous storage
+
+ Iterators
+ begin
+ cbegin - returns an iterator to the beginning
+ end - returns an iterator to the end
+ rbegin - returns a reverse iterator to the beginning
+ rend
+ crend - returns a reverse iterator to the end
+ 
+ Capacity
+ empty - checks whether the container is empty
+ size - returns the number of elements
+ max_size - returns the maximum possible number of elements
+ reserve - reserves storage
+ capacity - returns the number of elements that can be held in currently allocated storage
+
+ Modifiers
+ clear - clears the contents
+ insert - inserts elements
+ emplace - constructs element in-place
+ erase -  erases elements
+ push_back - adds an element to the end
+ emplace_back - constructs an element in-place at the end
+ pop_back - removes the last element
+ resize - changes the number of elements stored
+ swap - swaps the contents
+ 
+Stack API's
+ Element Access
+ • top – accesses the top element (public member function)
+ Capacity
+ • empty – checks whether the container adaptor is empty (public member function)
+ • size – returns the number of elements (public member function)
+ Modifiers
+ • push – inserts element at the top (public member function)
+ • push_range (C++23) – inserts a range of elements at the top (public member function)
+ • emplace (C++11) – constructs element in-place at the top (public member function)
+ • pop – removes the top element (public member function)
+ • swap (C++11) – swaps the contents (public member function)
+ 
+Queue API's
+ Element Access
+ • front – accesses the first element (public member function)
+ • back – accesses the last element (public member function)
+ Capacity
+ • empty – checks whether the container adaptor is empty (public member function)
+ • size – returns the number of elements (public member function)
+ Modifiers
+ • push – inserts element at the end (public member function)
+ • push_range (C++23) – inserts a range of elements at the end (public member function)
+ • emplace (C++11) – constructs element in-place at the end (public member function)
+ • pop – removes the first element (public member function)
+ • swap (C++11) – swaps the contents (public member function)
+ 
+List API's
+ Element Access
+ • front – accesses the first element (public member function)
+ • back – accesses the last element (public member function)
+ Iterators
+ • begin / cbegin (C++11) – returns an iterator to the beginning (public member function)
+ • end / cend (C++11) – returns an iterator to the end (public member function)
+ • rbegin / crbegin (C++11) – returns a reverse iterator to the beginning (public member function)
+ • rend / crend (C++11) – returns a reverse iterator to the end (public member function)
+ Capacity
+ • empty – checks whether the container is empty (public member function)
+ • size – returns the number of elements (public member function)
+ • max_size – returns the maximum possible number of elements (public member function)
+ Modifiers
+ • clear – clears the contents (public member function)
+ • insert – inserts elements (public member function)
+ • insert_range (C++23) – inserts a range of elements (public member function)
+ • emplace (C++11) – constructs element in-place (public member function)
+ • erase – erases elements (public member function)
+ • push_back – adds an element to the end (public member function)
+ • emplace_back (C++11) – constructs an element in-place at the end (public member function)
+ • append_range (C++23) – adds a range of elements to the end (public member function)
+ • pop_back – removes the last element (public member function)
+ • push_front – inserts an element at the beginning (public member function)
+ • emplace_front (C++11) – constructs an element in-place at the beginning (public member function)
+ • prepend_range (C++23) – adds a range of elements to the beginning (public member function)
+ • pop_front – removes the first element (public member function)
+ • resize – changes the number of elements stored (public member function)
+ • swap – swaps the contents (public member function)
+ Operations
+ • merge – merges two sorted lists (public member function)
+ • splice – transfers elements from another list (public member function)
+ • remove / remove_if – removes elements satisfying specific criteria (public member function)
+ • reverse – reverses the order of the elements (public member function)
+ • unique – removes consecutive duplicate elements (public member function)
+ • sort – sorts the elements (public member function)
+ 
+Set API's
+ 
+ Iterators
+ • begin / cbegin (C++11) – returns an iterator to the beginning (public member function)
+ • end / cend (C++11) – returns an iterator to the end (public member function)
+ • rbegin / crbegin (C++11) – returns a reverse iterator to the beginning (public member function)
+ • rend / crend (C++11) – returns a reverse iterator to the end (public member function)
+ Capacity
+ • empty – checks whether the container is empty (public member function)
+ • size – returns the number of elements (public member function)
+ • max_size – returns the maximum possible number of elements (public member function)
+ Modifiers
+ • clear – clears the contents (public member function)
+ • insert – inserts elements or nodes (since C++17) (public member function)
+ • insert_range (C++23) – inserts a range of elements (public member function)
+ • emplace (C++11) – constructs element in-place (public member function)
+ • emplace_hint (C++11) – constructs elements in-place using a hint (public member function)
+ • erase – erases elements (public member function)
+ • swap – swaps the contents (public member function)
+ • extract (C++17) – extracts nodes from the container (public member function)
+ • merge (C++17) – splices nodes from another container (public member function)
+ Lookup
+ • count – returns the number of elements matching a specific key (public member function)
+ • find – finds element with specific key (public member function)
+ • contains (C++20) – checks if the container contains an element with specific key (public member function)
+
+Map API's
+ Element Access
+ • at – accesses specified element with bounds checking (public member function)
+ • operator[] – accesses or inserts specified element (public member function)
+ Iterators
+ • begin / cbegin (C++11) – returns an iterator to the beginning (public member function)
+ • end / cend (C++11) – returns an iterator to the end (public member function)
+ • rbegin / crbegin (C++11) – returns a reverse iterator to the beginning (public member function)
+ • rend / crend (C++11) – returns a reverse iterator to the end (public member function)
+ Capacity
+ • empty – checks whether the container is empty (public member function)
+ • size – returns the number of elements (public member function)
+ • max_size – returns the maximum possible number of elements (public member function)
+ Modifiers
+ • clear – clears the contents (public member function)
+ • insert – inserts elements or nodes (since C++17) (public member function)
+ • insert_range (C++23) – inserts a range of elements (public member function)
+ • insert_or_assign (C++17) – inserts an element or assigns to the current element if the key exists (public member function)
+ • emplace (C++11) – constructs element in-place (public member function)
+ • emplace_hint (C++11) – constructs elements in-place using a hint (public member function)
+ • try_emplace (C++17) – inserts in-place if key does not exist; does nothing if it exists (public member function)
+ • erase – erases elements (public member function)
+ • swap – swaps the contents (public member function)
+ • extract (C++17) – extracts nodes from the container (public member function)
+ • merge (C++17) – splices nodes from another container (public member function)
+ Lookup
+ • count – returns the number of elements matching a specific key (public member function)
+ • find – finds an element with a specific key (public member function)
+ • contains (C++20) – checks if the container contains an element with a specific key (public member function)
+ 
+Unordered_map
+ Iterators
+ • begin / cbegin – returns an iterator to the beginning (public member function)
+ • end / cend – returns an iterator to the end (public member function)
+ Capacity
+ • empty – checks whether the container is empty (public member function)
+ • size – returns the number of elements (public member function)
+ • max_size – returns the maximum possible number of elements (public member function)
+ Modifiers
+ • clear – clears the contents (public member function)
+ • insert – inserts elements or nodes (since C++17) (public member function)
+ • insert_range (C++23) – inserts a range of elements (public member function)
+ • insert_or_assign (C++17) – inserts an element or assigns to the current element if the key exists (public member function)
+ • emplace – constructs element in-place (public member function)
+ • emplace_hint – constructs elements in-place using a hint (public member function)
+ • try_emplace (C++17) – inserts in-place if key does not exist; does nothing if it exists (public member function)
+ • erase – erases elements (public member function)
+ • swap – swaps the contents (public member function)
+ • extract (C++17) – extracts nodes from the container (public member function)
+ • merge (C++17) – splices nodes from another container (public member function)
+ Lookup
+ • at – accesses specified element with bounds checking (public member function)
+ • operator[] – accesses or inserts specified element (public member function)
+ • count – returns the number of elements matching a specific key (public member function)
+ • find – finds element with a specific key (public member function)
+ 
+ 
+Deque
+ Element Access
+ • at – accesses specified element with bounds checking (public member function)
+ • operator[] – accesses specified element (public member function)
+ • front – accesses the first element (public member function)
+ • back – accesses the last element (public member function)
+ Iterators
+ • begin / cbegin (C++11) – returns an iterator to the beginning (public member function)
+ • end / cend (C++11) – returns an iterator to the end (public member function)
+ • rbegin / crbegin (C++11) – returns a reverse iterator to the beginning (public member function)
+ • rend / crend (C++11) – returns a reverse iterator to the end (public member function)
+ Capacity
+ • empty – checks whether the container is empty (public member function)
+ • size – returns the number of elements (public member function)
+ • max_size – returns the maximum possible number of elements (public member function)
+ • shrink_to_fit (DR*) – reduces memory usage by freeing unused memory (public member function)
+ Modifiers
+ • clear – clears the contents (public member function)
+ • insert – inserts elements (public member function)
+ • insert_range (C++23) – inserts a range of elements (public member function)
+ • emplace (C++11) – constructs element in-place (public member function)
+ • erase – erases elements (public member function)
+ • push_back – adds an element to the end (public member function)
+ • emplace_back (C++11) – constructs an element in-place at the end (public member function)
+ • append_range (C++23) – adds a range of elements to the end (public member function)
+ • pop_back – removes the last element (public member function)
+ • push_front – inserts an element at the beginning (public member function)
+ • emplace_front (C++11) – constructs an element in-place at the beginning (public member function)
+ • prepend_range (C++23) – adds a range of elements to the beginning (public member function)
+ • pop_front – removes the first element (public member function)
+ • resize – changes the number of elements stored (public member function)
+ • swap – swaps the contents (public member function)
+ 
+ 
+ forward_list
+ Element Access
+ • front – accesses the first element (public member function)
+ Iterators
+ • before_begin / cbefore_begin – returns an iterator to the element before the beginning (public member function)
+ • begin / cbegin – returns an iterator to the beginning (public member function)
+ • end / cend – returns an iterator to the end (public member function)
+ Capacity
+ • empty – checks whether the container is empty (public member function)
+ • max_size – returns the maximum possible number of elements (public member function)
+ Modifiers
+ • clear – clears the contents (public member function)
+ • insert_after – inserts elements after a given position (public member function)
+ • emplace_after – constructs elements in-place after a given position (public member function)
+ • insert_range_after (C++23) – inserts a range of elements after a given position (public member function)
+ • erase_after – erases an element after a given position (public member function)
+ • push_front – inserts an element at the beginning (public member function)
+ • emplace_front – constructs an element in-place at the beginning (public member function)
+ • prepend_range (C++23) – adds a range of elements to the beginning (public member function)
+ • pop_front – removes the first element (public member function)
+ • resize – changes the number of elements stored (public member function)
+ • swap – swaps the contents (public member function)
+ Operations
+ • merge – merges two sorted lists (public member function)
+ • splice_after – transfers elements from another forward_list (public member function)
+ • remove / remove_if – removes elements satisfying specific criteria (public member function)
+ • reverse – reverses the order of the elements (public member function)
+ • unique – removes consecutive duplicate elements (public member function)
+ • sort – sorts the elements (public member function)
+
 */
-//s
 
 // C Program for
 // checking duplicate
